@@ -1,0 +1,180 @@
+<script setup>
+import { ref } from 'vue'
+
+const info = ref({
+  name: "Shane Lin",
+  role: "軟體工程師",
+  location: "台北, 台灣",
+  email: "z9027606@gmail.com"
+})
+
+const experiences = ref([
+  {
+    id: 1,
+    period: "2024/07 - 至今",
+    company: "華電聯網股份有限公司",
+    role: "高級工程師",
+    description: [
+        "系統維護：負責CRM與SAP對接並進行功能開發或優化",
+        "專案管理：負責CRM系統的ISSUE排程以及需求訪談",
+        "資安維運：CRM系統主機內的資安問題修復或插件升級",
+        "建立基礎CI/CD，整合版本控制與自動化部署，提升系統交付效率"
+    ]
+  },
+  {
+    id: 2,
+    period: "2022/09 - 2024/06",
+    company: "掘夢網股份有限公司",
+    role: "網頁設計部主管",
+    description: [
+        "管理網頁設計部工作排程",
+        "替部門同仁安排學習作業及方向指導",
+        "舊有專案優化,維護,問題修正",
+        "引入GIT作為版控,也指導同仁使用",
+        "明確劃分前後端分離",
+        "前端技術導入Vue"
+    ]
+  },
+  {
+    id: 3,
+    period: "2021/05 - 2022/06",
+    company: "和信超媒體股份有限公司",
+    role: "初階後端工程師",
+    description: [
+        "平台功能開發，維護",
+        "串接API,撰寫API",
+        "舊系統翻新",
+        "完成主管交代事項（優化系統）"
+    ]
+  },
+  {
+    id: 4,
+    period: "2019/11 - 2021/04",
+    company: "某森德網站設計公司",
+    role: "後端助理工程師",
+    description: [
+      "網頁前後端串接",
+      "後台功能開發",
+      "網頁切版",
+      "完成主管交辦事項",
+    ]
+  }
+])
+
+const skills = ref(["PHP(Laravel)", "JavaScript", "jQuery", "Git", "Docker", "Vue3", "Python", "MySQL", "Linux基礎指令", "CI/CD", "Nginx"])
+</script>
+
+<template>
+  <div class="py-12 md:py-20 animate-fade-in-up space-y-24">
+    
+    <!-- Section 1: Intro & Photo -->
+    <section class="flex flex-col md:flex-row gap-12 items-start">
+      <!-- Profile Image -->
+      <div class="w-full md:w-1/3 shrink-0">
+        <div class="aspect-square bg-gray-100 rounded-2xl shadow-inner overflow-hidden relative group">
+          <img src="/photo.jpg" alt="Profile" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
+        </div>
+      </div>
+      
+      <!-- Brief Info & Bio -->
+      <div class="w-full md:w-2/3 flex flex-col justify-center h-full pt-4 md:pt-0">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-primary mb-2">
+          您好，我是 {{ info.name }}
+        </h1>
+        <p class="text-xl text-accent font-medium mb-8">{{ info.role }}</p>
+
+        <!-- Information List -->
+        <ul class="space-y-3 mb-8 text-secondary text-sm md:text-base">
+          <li class="flex items-center">
+            <span class="w-24 font-semibold text-primary">所在地</span>
+            <span>{{ info.location }}</span>
+          </li>
+          <li class="flex items-center">
+            <span class="w-24 font-semibold text-primary">電子郵件</span>
+            <a :href="'mailto:' + info.email" class="hover:text-accent transition-colors">{{ info.email }}</a>
+          </li>
+        </ul>
+
+        <div class="prose prose-lg text-secondary leading-relaxed">
+          <p>
+            累積約 6 年前後端開發經驗，從後端助理工程師一路成長為現任高級工程師，也曾擔任部門主管，負責技術決策與團隊帶領。
+          </p>
+          <p>
+            這段歷程讓我逐漸從單純的工程實作者，轉變為能兼顧技術深度與整體系統思維的工程師。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Experience (經歷) -->
+    <section>
+      <h2 class="text-3xl font-bold text-primary mb-10 pb-4 border-b border-gray-100 flex items-center">
+        <span class="bg-accent w-2 h-8 mr-4 rounded-full"></span>
+        工作經歷
+      </h2>
+      
+      <div class="space-y-12 pl-6 md:pl-0">
+        <div v-for="exp in experiences" :key="exp.id" class="relative pl-8 md:pl-0">
+          
+          <div class="flex flex-col md:flex-row gap-4 md:gap-12 md:items-start group">
+            <!-- Timeline Line (Mobile) -->
+            <div class="absolute left-0 top-0 bottom-[-3rem] w-px bg-gray-200 md:hidden last:bg-transparent"></div>
+            <!-- Timeline Dot (Mobile) -->
+            <div class="absolute left-[-5px] top-2 w-3 h-3 rounded-full bg-accent md:hidden ring-4 ring-white"></div>
+
+            <!-- Date -->
+            <div class="md:w-1/4 shrink-0 pt-1">
+              <span class="text-sm font-mono text-gray-500 group-hover:text-accent transition-colors">{{ exp.period }}</span>
+            </div>
+            
+            <!-- Details -->
+            <div class="md:w-3/4 pb-8 md:pb-0 md:border-l md:border-gray-200 md:pl-10 relative">
+               <!-- Timeline Dot (Desktop) -->
+               <div class="hidden md:block absolute left-[-6px] top-2 w-3 h-3 rounded-full bg-gray-300 group-hover:bg-accent transition-colors ring-4 ring-white"></div>
+               
+              <h3 class="text-xl font-bold text-primary mb-1">{{ exp.role }}</h3>
+              <p class="text-accent font-medium mb-4">{{ exp.company }}</p>
+              <ul class="list-disc leading-relaxed text-secondary pl-5 space-y-1.5 marker:text-gray-400">
+                <li v-for="(item, index) in exp.description" :key="index">
+                  {{ item }}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Skills -->
+    <section>
+      <h2 class="text-3xl font-bold text-primary mb-8 flex items-center">
+        <span class="bg-gray-300 w-2 h-8 mr-4 rounded-full"></span>
+        核心技能
+      </h2>
+      <div class="flex flex-wrap gap-3">
+        <span v-for="skill in skills" :key="skill" class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-semibold text-primary shadow-sm hover:shadow-md transition-shadow">
+          {{ skill }}
+        </span>
+      </div>
+    </section>
+
+  </div>
+</template>
+
+<style scoped>
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
