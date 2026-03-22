@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD Pipeline
 
 on:
   push:
@@ -7,9 +7,9 @@ on:
     branches: [ main, master ]
 
 jobs:
+  # 階段 1：CI 編譯檢查 (確保程式碼沒有語法錯誤)
   build:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     
@@ -23,3 +23,36 @@ jobs:
       
     - name: Build project
       run: npm run build
+
+  # 階段 2：CD 自動部署 (當 Build 成功後，自動連入 Azure 主機更新 Docker)
+  deploy:
+    # 第一步一定要成功，才會執行這一步
+    needs: build
+    # 只有當 Push 到 main 主分支時才執行部署 (避免發 PR 時亂部署)
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Deploy to Azure Server via SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.AZURE_HOST }}
+        username: ${{ secrets.AZURE_USERNAME }}
+        password: ${{ secrets.AZURE_PASSWORD }}
+        port: 22
+        # 在遠端主機上自動執行的指令腳本
+        script: |
+          # 1. 檢查主機上是否有 Portfolio 資料夾，沒有的話自動 Clone
+          if [ ! -d "Portfolio" ]; then
+            git clone https://github.com/jacky0996/Portfolio.git
+          fi
+          
+          # 2. 進入資料夾並拉取 (Pull) 最新的 GitHub 程式碼
+          cd Portfolio
+          git fetch origin
+          git reset --hard origin/main
+          git pull origin main
+          
+          # 3. 重新建立並背景啟動 Docker 正式環境
+          sudo docker-compose -f docker-compose.prod.yml down
+          sudo docker-compose -f docker-compose.prod.yml up -d --build

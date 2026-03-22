@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  portfolio-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - "80:80"   # 左邊為伺服器對外 Port，可依需求更改為 80 或是 443
+    restart: always
+    environment:
+      - NODE_ENV=production
