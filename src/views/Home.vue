@@ -11,9 +11,10 @@ const projects = ref([
   },
   {
     id: 2,
-    title: '資料分析儀表板',
-    description: '一個供內部使用的資料視覺化儀表板，具備輕量級圖表與全響應式設計。',
-    tags: ['Javascript', 'Chart.js', 'Dashboard']
+    title: '自動化社群互動與爬蟲系統',
+    description: '基於 Python 構建的全自動排程發文系統，整合 Playwright 爬蟲與 Docker 進行一鍵部署還原。',
+    image: '/automation/auto_2.png',
+    tags: ['Python', 'Playwright', 'MySQL', 'Docker']
   },
   {
     id: 3,
