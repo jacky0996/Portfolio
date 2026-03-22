@@ -50,7 +50,18 @@ const allProjects = ref([
         id: 3,
         title: 'EDM 營銷與成員管理系統',
         description: '整合企業級 SSO 驗證、大規模 Excel 處理與高效能數據維護的現代化營銷管理平台。',
-        content: '本專案為一套專為行銷團隊打造的 EDM 管理系統。開發亮點在於我特別嘗試了「系統分析 (SA) 文件」的撰寫，包含針對 PM 與利害關係人的周報日誌與 Use Case 流程圖，確保需求轉化為功能的嚴謹度。技術上則實裝了與公司 HWS 系統的 SSO (Single Sign-On) 介接，採用一次性短期 Token 交換長期證明的機制。此方案不使用 Cookie，能有效防禦 CSRF 攻擊並支持跨網域部署，前端更實作了參數攔截與環境清理邏輯，大幅提升應用程式的安全性與使用者體驗。',
+        content: `本專案為一套專為行銷團隊打造的 EDM 管理系統。開發亮點在於我特別嘗試了「系統分析 (SA) 文件」的撰寫，包含針對 PM 與利害關係人的周報日誌與 Use Case 流程圖，確保需求轉化為功能的嚴謹度。
+
+在資安與權限管理層面，我們實作了與公司 HWS 系統的 SSO (Single Sign-On) 介接，採用「一次性短期 Token 交換長期證明的機制」。此架構具備三大優勢：
+- **防禦 CSRF 攻擊**：捨棄 Cookie 方案，瀏覽器不會自動發送憑證，從根本上避免了跨站請求偽造。
+- **解決跨網域限制**：支持 EDM (Vue) 與 HWS (Laravel) 在完全不同的網域甚至是網絡環境下對接。
+- **靈活性**：權限完全由 Authorization Header 控制，適合 SPA 與 API 分離的現代架構。
+
+實作流程如下：
+1. **引導跳轉**：使用者從內部系統跳轉時，網址帶入 ?token=SSO_TOKEN。
+2. **攔截與驗證**：前端路由守衛 (guard.ts) 優先檢查 URL 參數，偵測到 Token 後立即呼叫 AuthStore 進行驗證。
+3. **後端換票**：前端將短期 Token 送往驗證介面，HWS 驗證通過後會註銷該短效 Token 並回傳正式 accessToken。
+4. **清理與持久化**：驗證成功後使用 replace: true 移除網址參數以確保網址乾淨，並將正式 Token 儲存在 localStorage 供後續 API 請求使用。`,
         image: '/edm/edm05.png',
         gallery: [
             { url: '/edm/edm01.png', caption: '系統開發日誌：詳細紀錄每週技術決策，利於 PM 追縱進度' },
@@ -180,7 +191,7 @@ const currentProject = computed(() => {
                     </div>
                 </template>
 
-                <p class="leading-relaxed">
+                <p class="leading-relaxed whitespace-pre-line">
                     {{ currentProject.content }}
                 </p>
 

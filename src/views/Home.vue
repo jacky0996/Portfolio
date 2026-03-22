@@ -18,10 +18,12 @@ const projects = ref([
   },
   {
     id: 3,
-    title: '行動應用程式活動頁',
-    description: '具備平滑捲動動畫與現代字體排印的高轉換率活動入口網站。',
-    tags: ['HTML', 'CSS', 'Framer Motion']
+    title: 'EDM 營銷與成員管理系統',
+    description: '整合企業級 SSO 驗證、大規模 Excel 處理與高效能數據維護的現代化營銷管理平台。',
+    image: '/edm/edm05.png',
+    tags: ['Vue 3', 'Vben Admin', 'SSO 介接', 'SA 文件撰寫', 'Excel 集成']
   }
+
 ])
 </script>
 
