@@ -4,9 +4,10 @@ import { ref } from 'vue'
 const projects = ref([
   {
     id: 1,
-    title: '電商平台視覺重塑',
-    description: '使用 Vue 3 與 Tailwind CSS 替現代電商平台進行的極簡風格設計重構。',
-    tags: ['Vue 3', 'Tailwind', 'UI/UX']
+    title: '個人作品集網站 (包含 CI/CD)',
+    description: '使用 Vue 3 與 Tailwind CSS 打造的全響應式極簡作品集網站，並串接 GitHub Actions 與 Azure 伺服器實現自動化部署。',
+    image: '/portfolio/image.png',
+    tags: ['Vue 3', 'Tailwind', 'Azure', 'Docker', 'CI/CD']
   },
   {
     id: 2,
@@ -49,8 +50,13 @@ const projects = ref([
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div v-for="project in projects" :key="project.id" class="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full transform hover:-translate-y-1">
-          <div class="h-48 bg-gray-100 w-full rounded-t-xl group-hover:bg-gray-200 transition-colors flex items-center justify-center text-gray-400">
-            [作品預覽圖]
+          <div class="h-48 bg-gray-100 w-full rounded-t-xl group-hover:bg-gray-200 transition-colors flex items-center justify-center text-gray-400 overflow-hidden relative">
+            <template v-if="project.image">
+              <img :src="project.image" :alt="project.title" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
+            </template>
+            <template v-else>
+              [作品預覽圖]
+            </template>
           </div>
           <div class="p-6 flex flex-col flex-grow">
             <h3 class="text-xl font-bold text-primary mb-2 group-hover:text-accent transition-colors">{{ project.title }}</h3>

@@ -7,11 +7,16 @@ const route = useRoute()
 const allProjects = ref([
   {
     id: 1,
-    title: '電商平台視覺重塑',
-    description: '使用 Vue 3 與 Tailwind CSS 替現代電商平台進行的極簡風格設計重構。',
-    content: '這裡可以填寫長篇幅的敘述，例如：專案的挑戰、我們如何解決購物車結帳流程的阻礙，以及我們透過重新設計幫助業主提升了多少轉換率。',
-    tags: ['Vue 3', 'Tailwind', 'UI/UX'],
-    date: '2025-01'
+    title: '個人作品集網站 (前端與 CI/CD 實作)',
+    description: '使用 Vue 3 與 Tailwind CSS 打造的全響應式極簡作品集網站，並串接 GitHub Actions 與 Azure 伺服器實現自動化部署。',
+    content: '本專案的最大挑戰是如何在保持極簡頁面設計的同時，從零到有建立一套完整的軟體發布流程。前端採用 Vite 與 Vue 3 建構，樣式使用 Tailwind CSS V4 進行全響應式撰寫；基礎設施則選用微軟 Azure 虛擬主機，並寫入 Dockerfile 進行容器化封裝。最後搭配 GitHub Actions 設計 Pipeline，順利達成 CI/CD 自動化。',
+    image: '/portfolio/image.png',
+    gallery: [
+      { url: '/portfolio/image_1.png', caption: 'Azure 伺服器資源配置畫面' },
+      { url: '/portfolio/image_2.png', caption: 'GitHub Actions 的 CI/CD Pipeline 自動化流程截圖' }
+    ],
+    tags: ['Vue 3', 'Tailwind', 'Docker', 'Azure', 'CI/CD'],
+    date: '2026-03'
   },
   {
     id: 2,
@@ -53,8 +58,13 @@ const currentProject = computed(() => {
       
       <div class="space-y-12">
         <article v-for="project in allProjects" :key="project.id" class="flex flex-col md:flex-row gap-8 items-start border p-6 rounded-2xl hover:shadow-lg transition-shadow bg-white">
-          <div class="w-full md:w-1/3 h-48 sm:h-64 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400">
-            [作品預覽圖]
+          <div class="w-full md:w-1/3 h-48 sm:h-64 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 overflow-hidden relative">
+            <template v-if="project.image">
+              <img :src="project.image" :alt="project.title" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
+            </template>
+            <template v-else>
+              [作品預覽圖]
+            </template>
           </div>
           <div class="w-full md:w-2/3 flex flex-col justify-center h-full space-y-4">
             <h2 class="text-3xl font-bold text-primary">
@@ -100,8 +110,13 @@ const currentProject = computed(() => {
         </div>
       </div>
 
-      <div class="w-full h-64 md:h-96 bg-gray-100 rounded-2xl mb-12 flex items-center justify-center text-gray-400 text-xl font-medium shadow-inner">
-        [專案主視圖]
+      <div class="w-full md:h-[32rem] bg-gray-100 rounded-2xl mb-12 flex items-center justify-center text-gray-400 text-xl font-medium shadow-inner overflow-hidden">
+        <template v-if="currentProject.image">
+          <img :src="currentProject.image" :alt="currentProject.title" class="w-full h-full object-cover" />
+        </template>
+        <template v-else>
+          [專案主視圖]
+        </template>
       </div>
 
       <div class="prose prose-lg max-w-none text-secondary">
@@ -112,8 +127,20 @@ const currentProject = computed(() => {
           {{ currentProject.content }}
         </p>
         
-        <h3 class="text-2xl font-bold mt-12 mb-4 text-primary">開發挑戰與解決方案</h3>
-        <p class="leading-relaxed">
+        <!-- Gallery Section 呈現更多專案照片 -->
+        <template v-if="currentProject.gallery && currentProject.gallery.length > 0">
+          <div class="my-12 space-y-12">
+            <figure v-for="(img, idx) in currentProject.gallery" :key="idx" class="m-0">
+              <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50 flex justify-center p-2 md:p-4">
+                <img :src="img.url" :alt="img.caption" class="max-w-full h-auto rounded-lg" />
+              </div>
+              <figcaption class="text-center text-sm tracking-wide text-gray-500 mt-4 font-medium">{{ img.caption }}</figcaption>
+            </figure>
+          </div>
+        </template>
+
+        <h3 class="text-2xl font-bold mt-12 mb-4 text-primary" v-if="!currentProject.gallery">開發挑戰與解決方案</h3>
+        <p class="leading-relaxed" v-if="!currentProject.gallery">
           這裡可以詳細介紹專案在開發過程中所面臨的挑戰，以及你們是如何應用特定技術棧來克服這些問題的。
         </p>
       </div>
