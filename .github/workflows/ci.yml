@@ -38,7 +38,7 @@ jobs:
       with:
         host: ${{ secrets.AZURE_HOST }}
         username: ${{ secrets.AZURE_USERNAME }}
-        password: ${{ secrets.AZURE_PASSWORD }}
+        key: ${{ secrets.AZURE_KEY }}
         port: 22
         # 在遠端主機上自動執行的指令腳本
         script: |
