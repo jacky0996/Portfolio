@@ -4,8 +4,8 @@ import { ref } from 'vue'
 const projects = ref([
   {
     id: 1,
-    title: '個人作品集網站 (包含 CI/CD)',
-    description: '使用 Vue 3 與 Tailwind CSS 打造的全響應式極簡作品集網站，並串接 GitHub Actions 與 Azure 伺服器實現自動化部署。',
+    title: '個人作品集網站',
+    description: '專案包含 Vue 3 前端開發與基本的 CI/CD 自動化部署流程建置。',
     image: '/portfolio/image.png',
     tags: ['Vue 3', 'Tailwind', 'Azure', 'Docker', 'CI/CD']
   },
@@ -32,7 +32,7 @@ const projects = ref([
         作品集
       </h1>
       <p class="text-xl md:text-2xl text-secondary max-w-2xl font-light leading-relaxed">
-        本網站使用 Vue 3 作為核心框架，搭配 Tailwind CSS 進行全響應式的極簡視覺設計。由 Vite 提供快速打包體驗，並配合 Docker 與 GitHub Actions 實作自動化基礎 CI。
+        本網站使用 Vue 3 與 Tailwind CSS 建構前端畫面，並透過 Azure 主機搭配 Docker 及 GitHub Actions 實作 CI/CD 自動化部署流程。
       </p>
       <div class="mt-10">
         <router-link to="/project" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-accent hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent">
@@ -50,9 +50,9 @@ const projects = ref([
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div v-for="project in projects" :key="project.id" class="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full transform hover:-translate-y-1">
-          <div class="h-48 bg-gray-100 w-full rounded-t-xl group-hover:bg-gray-200 transition-colors flex items-center justify-center text-gray-400 overflow-hidden relative">
+          <div class="h-48 bg-gray-50 w-full rounded-t-xl group-hover:bg-gray-100 transition-colors flex items-center justify-center text-gray-400 overflow-hidden relative">
             <template v-if="project.image">
-              <img :src="project.image" :alt="project.title" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
+              <img :src="project.image" :alt="project.title" class="w-full h-full object-contain p-2 transform group-hover:scale-105 transition-transform duration-500" />
             </template>
             <template v-else>
               [作品預覽圖]

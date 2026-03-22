@@ -3,17 +3,30 @@ import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
+const selectedImage = ref(null)
+
+const openModal = (url) => {
+  selectedImage.value = url
+}
+
+const closeModal = () => {
+  selectedImage.value = null
+}
 
 const allProjects = ref([
   {
     id: 1,
-    title: '個人作品集網站 (前端與 CI/CD 實作)',
-    description: '使用 Vue 3 與 Tailwind CSS 打造的全響應式極簡作品集網站，並串接 GitHub Actions 與 Azure 伺服器實現自動化部署。',
-    content: '本專案的最大挑戰是如何在保持極簡頁面設計的同時，從零到有建立一套完整的軟體發布流程。前端採用 Vite 與 Vue 3 建構，樣式使用 Tailwind CSS V4 進行全響應式撰寫；基礎設施則選用微軟 Azure 虛擬主機，並寫入 Dockerfile 進行容器化封裝。最後搭配 GitHub Actions 設計 Pipeline，順利達成 CI/CD 自動化。',
+    title: '個人作品集網站',
+    description: '涵蓋前端介面開發與基本的伺服器部署設定。',
+    content: '實作部分主要採用 Vue 3 與 Tailwind CSS 進行版面開發。部署方面選擇 Azure 虛擬主機，並寫入 Dockerfile 進行容器化打包。最後透過 GitHub Actions 建立可自動連線更新的 CI/CD 部署流程。',
     image: '/portfolio/image.png',
     gallery: [
-      { url: '/portfolio/image_1.png', caption: 'Azure 伺服器資源配置畫面' },
-      { url: '/portfolio/image_2.png', caption: 'GitHub Actions 的 CI/CD Pipeline 自動化流程截圖' }
+      { url: '/portfolio/image_1.png', caption: 'Azure 伺服器資源畫面' },
+      { url: '/portfolio/image_2.png', caption: 'GitHub Actions CI/CD 流程截圖' }
+    ],
+    links: [
+      { name: '透過專屬網域名稱造訪', url: 'http://shaneportolio.japanwest.cloudapp.azure.com', note: '若連線有問題，可能是 DNS 尚未生效配置' },
+      { name: '透過主機 IP 直接造訪', url: 'http://20.18.160.75' }
     ],
     tags: ['Vue 3', 'Tailwind', 'Docker', 'Azure', 'CI/CD'],
     date: '2026-03'
@@ -58,9 +71,9 @@ const currentProject = computed(() => {
       
       <div class="space-y-12">
         <article v-for="project in allProjects" :key="project.id" class="flex flex-col md:flex-row gap-8 items-start border p-6 rounded-2xl hover:shadow-lg transition-shadow bg-white">
-          <div class="w-full md:w-1/3 h-48 sm:h-64 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 overflow-hidden relative">
+          <div class="w-full md:w-1/3 h-48 sm:h-64 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 overflow-hidden relative">
             <template v-if="project.image">
-              <img :src="project.image" :alt="project.title" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
+              <img :src="project.image" :alt="project.title" class="w-full h-full object-contain p-2 transform group-hover:scale-105 transition-transform duration-500" />
             </template>
             <template v-else>
               [作品預覽圖]
@@ -110,9 +123,9 @@ const currentProject = computed(() => {
         </div>
       </div>
 
-      <div class="w-full md:h-[32rem] bg-gray-100 rounded-2xl mb-12 flex items-center justify-center text-gray-400 text-xl font-medium shadow-inner overflow-hidden">
+      <div class="w-full md:h-[32rem] bg-gray-50 rounded-2xl mb-12 flex items-center justify-center text-gray-400 text-xl font-medium shadow-inner overflow-hidden">
         <template v-if="currentProject.image">
-          <img :src="currentProject.image" :alt="currentProject.title" class="w-full h-full object-cover" />
+          <img :src="currentProject.image" :alt="currentProject.title" class="w-full h-full object-contain p-4 cursor-zoom-in hover:opacity-90 transition-opacity" @click="openModal(currentProject.image)" />
         </template>
         <template v-else>
           [專案主視圖]
@@ -123,6 +136,22 @@ const currentProject = computed(() => {
         <p class="text-xl leading-relaxed mb-6 font-light">
           {{ currentProject.description }}
         </p>
+
+        <!-- 外部連結按鈕 -->
+        <template v-if="currentProject.links && currentProject.links.length > 0">
+          <div class="flex flex-wrap gap-6 mb-8 mt-4 not-prose">
+            <div v-for="link in currentProject.links" :key="link.url" class="flex flex-col">
+              <a :href="link.url" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-full shadow-md text-white bg-primary hover:bg-accent transition-colors shrink-0 whitespace-nowrap">
+                {{ link.name }}
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+              <span v-if="link.note" class="text-xs text-gray-500 mt-2 ml-1 opacity-80">*{{ link.note }}</span>
+            </div>
+          </div>
+        </template>
+
         <p class="leading-relaxed">
           {{ currentProject.content }}
         </p>
@@ -132,7 +161,7 @@ const currentProject = computed(() => {
           <div class="my-12 space-y-12">
             <figure v-for="(img, idx) in currentProject.gallery" :key="idx" class="m-0">
               <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50 flex justify-center p-2 md:p-4">
-                <img :src="img.url" :alt="img.caption" class="max-w-full h-auto rounded-lg" />
+                <img :src="img.url" :alt="img.caption" class="max-w-full h-auto rounded-lg object-contain cursor-zoom-in hover:opacity-90 transition-opacity" @click="openModal(img.url)" />
               </div>
               <figcaption class="text-center text-sm tracking-wide text-gray-500 mt-4 font-medium">{{ img.caption }}</figcaption>
             </figure>
@@ -151,5 +180,15 @@ const currentProject = computed(() => {
       <h2 class="text-3xl font-bold text-primary mb-4">找不到該專案</h2>
       <router-link to="/project" class="text-accent hover:underline">返回專案列表</router-link>
     </div>
+
+    <!-- Image Modal -->
+    <transition name="fade">
+      <div v-if="selectedImage" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 cursor-zoom-out" @click="closeModal">
+        <button class="absolute top-6 right-6 text-white hover:text-gray-300 transform hover:scale-110 transition-all font-bold text-3xl z-50">
+          ✕
+        </button>
+        <img :src="selectedImage" class="max-h-[85vh] max-w-[90vw] object-contain rounded-lg shadow-2xl cursor-default" @click.stop />
+      </div>
+    </transition>
   </div>
 </template>
