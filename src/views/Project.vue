@@ -48,11 +48,19 @@ const allProjects = ref([
     },
     {
         id: 3,
-        title: '行動應用程式活動頁',
-        description: '具備平滑捲動動畫與現代字體排印的高轉換率活動入口網站。',
-        content: '為產品正式發布所開發的全響應式入口頁面，藉由純客製化的 CSS 動態效果，將產品特色無縫呈現在使用者眼前。',
-        tags: ['HTML', 'CSS', 'Framer Motion']
+        title: 'EDM 營銷與成員管理系統',
+        description: '整合企業級 SSO 驗證、大規模 Excel 處理與高效能數據維護的現代化營銷管理平台。',
+        content: '本專案為一套專為行銷團隊打造的 EDM 管理系統。開發亮點在於我特別嘗試了「系統分析 (SA) 文件」的撰寫，包含針對 PM 與利害關係人的周報日誌與 Use Case 流程圖，確保需求轉化為功能的嚴謹度。技術上則實裝了與公司 HWS 系統的 SSO (Single Sign-On) 介接，採用一次性短期 Token 交換長期證明的機制。此方案不使用 Cookie，能有效防禦 CSRF 攻擊並支持跨網域部署，前端更實作了參數攔截與環境清理邏輯，大幅提升應用程式的安全性與使用者體驗。',
+        image: '/edm/edm05.png',
+        gallery: [
+            { url: '/edm/edm01.png', caption: '系統開發日誌：詳細紀錄每週技術決策，利於 PM 追縱進度' },
+            { url: '/edm/edm02.png', caption: 'Use Case 流程圖：在編碼前進行完整的系統邏輯規劃' },
+            { url: '/edm/edm07.png', caption: '表單組件開發：封裝 API 介接邏輯，支持非同步數據驗證與提交' },
+            { url: '/edm/edm08.png', caption: '高效能成員清單頁：整合 VXE Table 處理大量數據的展示與搜尋' }
+        ],
+        tags: ['Vue 3', 'Vben Admin', 'SSO 介接', 'SA 文件撰寫', 'Excel 集成']
     }
+
 ])
 
 const isSingleProject = computed(() => {
