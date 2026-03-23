@@ -70,7 +70,7 @@ const allProjects = ref([
             { url: '/edm/edm08.png', caption: '高效能成員清單頁：整合 VXE Table 處理大量數據的展示與搜尋' }
         ],
         links: [
-            { name: '前往 GitHub 專案原始碼', url: 'https://github.com/jacky0996/EDM.git' }
+            { name: '前往 GitHub 專案原始碼', url: 'https://github.com/jacky0996/EDM.git', note: '僅提供程式碼 相關介接系統暫時無法提供' }
         ],
         tags: ['Vue 3', 'Vben Admin', 'SSO 介接', 'SA 文件撰寫', 'Excel 集成']
     },
@@ -100,20 +100,30 @@ const allProjects = ref([
     },
     {
         id: 5,
-        title: '歷年多元實務開發案例彙整',
-        description: '集結過往任職期間參與的多項企業級專案，包含遊戲門戶、ERP 維護及金流串接。',
-        content: `此項目彙整了我在過往職涯中，因受限於企業內部機密 (NDA) 或系統環境因素，無法對外公開原始碼的各類實務開發成果。這些專案經驗奠定了我處理複雜商業邏輯與高可靠性系統的基礎。
+        title: '歷年實務開發案例彙整',
+        content: `此項目彙整了我在「掘夢網 (Digeam)」時期擔任小組主管及後端開發的重點實務貢獻。
 
-核心案例包括：
-1. **遊戲官方入口與管理平台**：主導多款大型線上遊戲的官網翻新，將傳統架構遷移至前後端分離模式。
-2. **多系統數據對接接口**：維護企業內部核心 SAP 與 CRM 之間的數據交換模組，優化異質數據同步。
-3. **活動售票與支付系統**：開發支援高併發流量的活動報名介面，並串接第三方金流支付 API。
-4. **伺服器維運與資安強化**：定期執行主機 OS 升級、資安漏洞掃描修正及系統效能監控。
+在技術實踐層面，我主導了多個遊戲官網的「Game Mall (遊戲商城)」系統開發：
+- **核心後端與數據整合**：負責金流支付 API 串接，並確保外部網域與內部遊戲實時數據的高效對接。
+- **動態帳務處理**：系統能讓玩家輸入角色 ID 後，即時呼叫內部 API 獲取詳盡的角色資料與帳戶狀態，並直接進行點數與道具的購買及入點作業。
 
-這些實戰經驗讓我能從更高的維度思考系統架構，並在面對未知問題時能迅速找出解決方案。`,
-        image: '/portfolio/image_1.png',
+在團隊管理與流程優化層面：
+- **推行前後端職責分離**：主導該公司「網頁設計部門」內部前後端開發流程的分離設定。這套科學的工作流管理模式大幅提昇了專案開發效率。
+- **招聘與引才標準**：這套開發模式目前仍是該公司在招聘與篩選技術同仁時的重要評估依據。
+
+這些實戰案例體現了我將複雜業務需求抽象化並落實為高品質代碼的能力。`,
+        image: null,
+        gallery: [
+            { url: '/digeam/digeam_01.png', caption: '掘夢網遊戲商城 (Game Mall) - 後端數據與金流串接核心作品' },
+            { url: '/digeam/digeam_03.png', caption: '角色登入介面 - 玩家輸入 ID 後系統即時連動遊戲 API' },
+            { url: '/digeam/digeam_04.png', caption: '登入後介面 - 獲取角色資料並直接進行購點與商城購買行為' },
+            { url: '/digeam/digeam_02.png', caption: '技術流程管理 - 實施前後端分工的最佳實踐，目前仍為公司招募標準' }
+        ],
+        links: [
+            { name: '造訪遊戲商城專案界面', url: 'https://cbm.digeam.com/gameMall' }
+        ],
         isConfidential: true,
-        tags: ['系統架構', '前後端整合', '企業級應用', '資安維運', '實踐經驗']
+        tags: ['後端開發', '電商金流', '流程管理', 'API 整合', 'PHP/Laravel']
     }
 
 ])
@@ -152,7 +162,8 @@ const currentProject = computed(() => {
                         </template>
                     </div>
                     <div class="w-full md:w-2/3 flex flex-col justify-center h-full space-y-4">
-                        <div v-if="project.isConfidential" class="px-2 py-0.5 bg-amber-50 text-amber-600 rounded text-[10px] font-bold uppercase tracking-wider border border-amber-100 w-fit">
+                        <div v-if="project.isConfidential"
+                            class="px-2 py-0.5 bg-amber-50 text-amber-600 rounded text-[10px] font-bold uppercase tracking-wider border border-amber-100 w-fit">
                             Commercial Case Study
                         </div>
                         <h2 class="text-3xl font-bold text-primary">
@@ -193,7 +204,8 @@ const currentProject = computed(() => {
             </h1>
 
             <div v-if="currentProject.isConfidential" class="mb-4">
-                <span class="px-2.5 py-1 bg-amber-50 text-amber-600 text-xs rounded-md font-bold border border-amber-100 uppercase tracking-tighter">
+                <span
+                    class="px-2.5 py-1 bg-amber-50 text-amber-600 text-xs rounded-md font-bold border border-amber-100 uppercase tracking-tighter">
                     受保密協議 (NDA) 保護：實務案例
                 </span>
             </div>
@@ -238,7 +250,7 @@ const currentProject = computed(() => {
                                 </svg>
                             </a>
                             <span v-if="link.note" class="text-xs text-gray-500 mt-2 ml-1 opacity-80">*{{ link.note
-                                }}</span>
+                            }}</span>
                         </div>
                     </div>
                 </template>
@@ -246,9 +258,12 @@ const currentProject = computed(() => {
                 <!-- 保密合約提示 -->
                 <template v-else-if="currentProject.isConfidential">
                     <div class="flex flex-wrap gap-6 mb-10 mt-6 not-prose">
-                        <div class="inline-flex items-center justify-center px-6 py-3 border border-dashed border-amber-200 text-sm font-semibold rounded-2xl text-amber-700 bg-amber-50/30 italic">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        <div
+                            class="inline-flex items-center justify-center px-6 py-3 border border-dashed border-amber-200 text-sm font-semibold rounded-2xl text-amber-700 bg-amber-50/30 italic">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-amber-500" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                             </svg>
                             此專案受商業保密協議限制，恕不公開原始碼及機密細節。
                         </div>

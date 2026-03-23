@@ -75,13 +75,13 @@ const professionalWorks = ref([
     {
         id: 2,
         projectId: 5,
-        title: '掘夢網大型遊戲官方入口與管理平台',
-        company: '掘夢網 (目前運作中)',
-        description: '主導多款線上遊戲官網的架構翻新與前後端分離實作。成功將專案遷移至 Vue 3 核心開發模式，並建立 Git 工作流規範與自動化部署流程，大幅提升了開發效率與跨部門協作的程式穩定度。',
-        techStack: ['Vue 3', 'PHP', 'jQuery', 'Git'],
-        status: 'Live',
-        link: 'https://www.digeam.com/',
-        note: '※ 受 NDA 協議保護，僅展示公開界面成果'
+        title: '歷年實務開發案例彙整',
+        company: '歷年公司專案實蹟',
+        description: '',
+        techStack: ['後端開發', '電商金流', '流程管理', 'API 整合'],
+        status: 'NDA',
+        link: 'https://cbm.digeam.com/gameMall',
+        note: '※ 受保密條款保護，機敏資料不可對外公開'
     }
 ])
 
@@ -232,25 +232,18 @@ const skills = ref(["PHP(Laravel)", "JavaScript", "jQuery", "Git", "Docker", "Vu
                                 </svg>
                                 {{ work.note }}
                             </div>
-                        <div class="flex items-center gap-4">
-                            <router-link v-if="work.projectId" :to="`/project/${work.projectId}`"
-                                class="inline-flex items-center text-primary text-sm font-bold hover:text-accent transition-colors group/case">
-                                專案詳細說明
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transform group-hover/case:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                </svg>
-                            </router-link>
-                            <a v-if="work.link" :href="work.link" target="_blank" rel="noopener noreferrer"
-                                class="inline-flex items-center text-accent text-sm font-bold hover:underline transition-colors group/link">
-                                造訪公開介面
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="h-4 w-4 ml-1 transform group-hover/link:translate-x-1 transition-transform"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M14 5l7 7-7 7" />
-                                </svg>
-                            </a>
-                        </div>
+                            <div class="flex items-center gap-4">
+                                <router-link v-if="work.projectId" :to="`/project/${work.projectId}`"
+                                    class="inline-flex items-center text-primary text-sm font-bold hover:text-accent transition-colors group/case">
+                                    專案詳細說明
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="h-4 w-4 ml-1 transform group-hover/case:translate-x-1 transition-transform"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </router-link>
+                            </div>
                         </div>
                     </div>
                 </div>
