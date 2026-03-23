@@ -3,13 +3,6 @@ import { ref } from 'vue'
 
 const projects = ref([
   {
-    id: 1,
-    title: '個人作品集網站',
-    description: '專案包含 Vue 3 前端開發與基本的 CI/CD 自動化部署流程建置。',
-    image: '/portfolio/image.png',
-    tags: ['Vue 3', 'Tailwind', 'Azure', 'Docker', 'CI/CD']
-  },
-  {
     id: 2,
     title: '自動化社群互動與爬蟲系統',
     description: '基於 Python 構建的全自動排程發文系統，整合 Playwright 爬蟲與 Docker 進行一鍵部署還原。',
@@ -22,6 +15,13 @@ const projects = ref([
     description: '整合企業級 SSO 驗證、大規模 Excel 處理與高效能數據維護的現代化營銷管理平台。',
     image: '/edm/edm05.png',
     tags: ['Vue 3', 'Vben Admin', 'SSO 介接', 'SA 文件撰寫', 'Excel 集成']
+  },
+  {
+    id: 5,
+    title: '歷年多元實務開發案例彙整',
+    description: '因受 NDA 限制無法公開原始碼的各類企業專案，包含大型遊戲入口與 SAP/CRM 整合。',
+    image: '/portfolio/image_1.png',
+    tags: ['系統架構', '前後端整合', '資安維運', '實踐經驗']
   }
 
 ])

@@ -69,7 +69,51 @@ const allProjects = ref([
             { url: '/edm/edm07.png', caption: '表單組件開發：封裝 API 介接邏輯，支持非同步數據驗證與提交' },
             { url: '/edm/edm08.png', caption: '高效能成員清單頁：整合 VXE Table 處理大量數據的展示與搜尋' }
         ],
+        links: [
+            { name: '前往 GitHub 專案原始碼', url: 'https://github.com/jacky0996/EDM.git' }
+        ],
         tags: ['Vue 3', 'Vben Admin', 'SSO 介接', 'SA 文件撰寫', 'Excel 集成']
+    },
+    {
+        id: 4,
+        title: 'CRM派工系統優化流程及自動派工',
+        description: '優化現有派工系統 節省人力及繁瑣重複事項',
+        content: `此專案為我於「華電聯網」期間主導開發的 CRM 核心系統優化項目，核心成果為「自動派工設定功能」。
+
+原本公司的定期保固（定保）案件皆由客服單位統一接收後，再手動派遣給各相關單位的小組長。這種模式不僅增加了客服人員的大量行政負荷 (Loading)，也容易在人工傳達過程中產生派遣錯誤或延遲。
+
+為了優化此流程，我開發了一套自動化的派工設定機制：
+1. **跨系統整合**：串接公司內其他系統，自動獲取被指派單位的部門主管資訊。
+2. **層級式管理**：由部門主管設定所屬小組長，再由小組長指派具體工程師。
+3. **自動繼承與派遣**：系統會記憶此核心設定，未來該單位的定保案件將自動套用此規則進行派工，實現真正的一鍵自動化。
+4. **自動化監控機制**：撰寫背景排程 (Schedule) 每週自動檢查尚未完成派工的項目，並即時寄送通知信提醒相關主管，確保案件不被遺漏。
+
+此優化顯著降低了客服單位的維運壓力，並透過「部門主管各自領案」的模式大幅提升了派工的準確性與響應速度。`,
+        image: null,
+        gallery: [
+            { url: '/crm/crm_01.png', caption: '定期保固清單頁面：顯示各案件及其已設定之派工單位' },
+            { url: '/crm/crm_02.png', caption: '案件定保詳細頁：呈現維修案件之詳細履歷與保固內容' },
+            { url: '/crm/crm_03.png', caption: '自動派工詳細資料：系統根據設定自動產生的相關處理歷程' }
+        ],
+        isConfidential: true,
+        tags: ['CRM', '自動派工', 'Laravel', 'Workflow Optimization', '排程管理']
+    },
+    {
+        id: 5,
+        title: '歷年多元實務開發案例彙整',
+        description: '集結過往任職期間參與的多項企業級專案，包含遊戲門戶、ERP 維護及金流串接。',
+        content: `此項目彙整了我在過往職涯中，因受限於企業內部機密 (NDA) 或系統環境因素，無法對外公開原始碼的各類實務開發成果。這些專案經驗奠定了我處理複雜商業邏輯與高可靠性系統的基礎。
+
+核心案例包括：
+1. **遊戲官方入口與管理平台**：主導多款大型線上遊戲的官網翻新，將傳統架構遷移至前後端分離模式。
+2. **多系統數據對接接口**：維護企業內部核心 SAP 與 CRM 之間的數據交換模組，優化異質數據同步。
+3. **活動售票與支付系統**：開發支援高併發流量的活動報名介面，並串接第三方金流支付 API。
+4. **伺服器維運與資安強化**：定期執行主機 OS 升級、資安漏洞掃描修正及系統效能監控。
+
+這些實戰經驗讓我能從更高的維度思考系統架構，並在面對未知問題時能迅速找出解決方案。`,
+        image: '/portfolio/image_1.png',
+        isConfidential: true,
+        tags: ['系統架構', '前後端整合', '企業級應用', '資安維運', '實踐經驗']
     }
 
 ])
@@ -108,6 +152,9 @@ const currentProject = computed(() => {
                         </template>
                     </div>
                     <div class="w-full md:w-2/3 flex flex-col justify-center h-full space-y-4">
+                        <div v-if="project.isConfidential" class="px-2 py-0.5 bg-amber-50 text-amber-600 rounded text-[10px] font-bold uppercase tracking-wider border border-amber-100 w-fit">
+                            Commercial Case Study
+                        </div>
                         <h2 class="text-3xl font-bold text-primary">
                             <router-link :to="`/project/${project.id}`" class="hover:text-accent transition-colors">
                                 {{ project.title }}
@@ -145,6 +192,12 @@ const currentProject = computed(() => {
                 {{ currentProject.title }}
             </h1>
 
+            <div v-if="currentProject.isConfidential" class="mb-4">
+                <span class="px-2.5 py-1 bg-amber-50 text-amber-600 text-xs rounded-md font-bold border border-amber-100 uppercase tracking-tighter">
+                    受保密協議 (NDA) 保護：實務案例
+                </span>
+            </div>
+
             <div class="flex items-center space-x-6 mb-10 border-b pb-6">
                 <span class="text-sm font-mono text-gray-400">{{ currentProject.date }}</span>
                 <div class="flex gap-2">
@@ -172,7 +225,6 @@ const currentProject = computed(() => {
                     {{ currentProject.description }}
                 </p>
 
-                <!-- 外部連結按鈕 -->
                 <template v-if="currentProject.links && currentProject.links.length > 0">
                     <div class="flex flex-wrap gap-6 mb-8 mt-4 not-prose">
                         <div v-for="link in currentProject.links" :key="link.url" class="flex flex-col">
@@ -187,6 +239,18 @@ const currentProject = computed(() => {
                             </a>
                             <span v-if="link.note" class="text-xs text-gray-500 mt-2 ml-1 opacity-80">*{{ link.note
                                 }}</span>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- 保密合約提示 -->
+                <template v-else-if="currentProject.isConfidential">
+                    <div class="flex flex-wrap gap-6 mb-10 mt-6 not-prose">
+                        <div class="inline-flex items-center justify-center px-6 py-3 border border-dashed border-amber-200 text-sm font-semibold rounded-2xl text-amber-700 bg-amber-50/30 italic">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                            此專案受商業保密協議限制，恕不公開原始碼及機密細節。
                         </div>
                     </div>
                 </template>
