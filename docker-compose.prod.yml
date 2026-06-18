@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     ports:
-      - "80:80"   # 左邊為伺服器對外 Port，可依需求更改為 80 或是 443
+      - "80:8080"   # 左邊為主機對外 Port(可改 80/443)，右邊為容器內 Nginx 聽的 $PORT
     restart: always
     environment:
       - NODE_ENV=production
