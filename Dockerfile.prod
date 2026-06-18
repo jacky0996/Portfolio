@@ -12,7 +12,7 @@ COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 # 用模板 + envsubst,讓 Nginx 監聽 Cloud Run 注入的 $PORT(預設 8080);
 # try_files 支援 Vue Router 的 History 模式(子路由重整不會 404)。
-RUN printf 'server {\n\
+RUN mkdir -p /etc/nginx/templates && printf 'server {\n\
     listen       %s;\n\
     server_name  localhost;\n\
     location / {\n\
