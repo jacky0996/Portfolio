@@ -4,21 +4,24 @@ import { ref } from 'vue'
 const info = ref({
     name: "Shane Lin",
     role: "軟體工程師",
-    location: "台北, 台灣",
-    email: "z9027606@gmail.com"
+    location: "高雄, 台灣",
+    email: "z9027606@gmail.com",
+    desiredRoles: "後端工程師、全端工程師、系統分析師、TPM、專案經理",
+    desiredLocations: "高雄、台南、台中"
 })
 
 const experiences = ref([
     {
         id: 1,
-        period: "2024/07 - 至今",
+        period: "2024/07 - 2026/05",
         company: "華電聯網股份有限公司",
         role: "高級工程師",
         description: [
             "系統維護：負責CRM與SAP對接並進行功能開發或優化",
             "專案管理：負責CRM系統的ISSUE排程以及需求訪談",
             "資安維運：CRM系統主機內的資安問題修復或插件升級",
-            "建立基礎CI/CD，整合版本控制與自動化部署，提升系統交付效率"
+            "建立基礎CI/CD，整合版本控制與自動化部署，提升系統交付效率",
+            "優化現有系統：將重複性工作優化成系統設定後自動執行，節省各單位工時"
         ]
     },
     {
@@ -50,7 +53,7 @@ const experiences = ref([
     {
         id: 4,
         period: "2019/11 - 2021/04",
-        company: "某森德網站設計公司",
+        company: "森德網站設計公司",
         role: "後端助理工程師",
         description: [
             "網頁前後端串接",
@@ -85,7 +88,7 @@ const professionalWorks = ref([
     }
 ])
 
-const skills = ref(["PHP(Laravel)", "JavaScript", "jQuery", "Git", "Docker", "Vue3", "Python", "MySQL", "Linux基礎指令", "CI/CD", "Nginx"])
+const skills = ref(["PHP(Laravel)", "JavaScript(Jquery)", "Git", "Docker", "Vue3", "Python3", "關聯式SQL","NoSQL", "Linux基礎指令", "CI/CD", "Nginx", "系統架構規劃", "跨部門溝通","基礎資安維護","雲端部署"])
 </script>
 
 <template>
@@ -119,16 +122,29 @@ const skills = ref(["PHP(Laravel)", "JavaScript", "jQuery", "Git", "Docker", "Vu
                         <a :href="'mailto:' + info.email" class="hover:text-accent transition-colors">{{ info.email
                         }}</a>
                     </li>
+                    <li class="flex items-start">
+                        <span class="w-24 shrink-0 font-semibold text-primary">希望職稱</span>
+                        <span>{{ info.desiredRoles }}</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="w-24 shrink-0 font-semibold text-primary">希望工作地</span>
+                        <span>{{ info.desiredLocations }}</span>
+                    </li>
                 </ul>
+            </div>
+        </section>
 
-                <div class="prose prose-lg text-secondary leading-relaxed">
-                    <p>
-                        累積約 6 年前後端開發經驗，從後端助理工程師一路成長為現任高級工程師，也曾擔任部門主管，負責技術決策與團隊帶領。
-                    </p>
-                    <p>
-                        這段歷程讓我逐漸從單純的工程實作者，轉變為能兼顧技術深度與整體系統思維的工程師。
-                    </p>
-                </div>
+        <!-- Section: Skills (核心技能) -->
+        <section>
+            <h2 class="text-3xl font-bold text-primary mb-8 flex items-center">
+                <span class="bg-gray-300 w-2 h-8 mr-4 rounded-full"></span>
+                核心技能
+            </h2>
+            <div class="flex flex-wrap gap-3">
+                <span v-for="skill in skills" :key="skill"
+                    class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-semibold text-primary shadow-sm hover:shadow-md transition-shadow">
+                    {{ skill }}
+                </span>
             </div>
         </section>
 
@@ -247,20 +263,6 @@ const skills = ref(["PHP(Laravel)", "JavaScript", "jQuery", "Git", "Docker", "Vu
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Section 3: Skills -->
-        <section>
-            <h2 class="text-3xl font-bold text-primary mb-8 flex items-center">
-                <span class="bg-gray-300 w-2 h-8 mr-4 rounded-full"></span>
-                核心技能
-            </h2>
-            <div class="flex flex-wrap gap-3">
-                <span v-for="skill in skills" :key="skill"
-                    class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-semibold text-primary shadow-sm hover:shadow-md transition-shadow">
-                    {{ skill }}
-                </span>
             </div>
         </section>
 

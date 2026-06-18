@@ -15,20 +15,54 @@ const closeModal = () => {
 
 const allProjects = ref([
     {
-        id: 1,
-        title: '個人作品集網站',
-        description: '涵蓋前端介面開發與基本的伺服器部署設定。',
-        content: '實作部分主要採用 Vue 3 與 Tailwind CSS 進行版面開發。部署方面選擇 Azure 虛擬主機，並寫入 Dockerfile 進行容器化打包。最後透過 GitHub Actions 建立可自動連線更新的 CI/CD 部署流程。',
-        image: '/portfolio/image.png',
+        id: 6,
+        title: 'Job Digger 職缺採集與管理生態系',
+        description: '由 FastAPI 爬蟲、Laravel 後台與身分中台串成的三層架構，自動採集並清洗 104 職缺資料。',
+        content: `開發動機：我自己在求職時，使用 104 需要經過繁瑣的步驟、跳轉多個分頁，才能看清「公司」與「職缺」之間的關聯。這個專案就是為了解決這個痛點而生，幫助我達成兩項優化：
+
+1. 依公司規模分層檢視：清單可依公司規模協助我決定要仔細看哪些項目——面對中小企業我著重在公司產品與職缺本身的發展，面對大型企業則更看重公司的發展性等面向。
+2. 過濾語意模糊的職缺：圖中的篩選分類是我實際用過 104 後設計的。我發現某些職缺內容匪夷所思，例如職稱寫「後端工程師」，作業內容卻完全沒提到開發語言或架構，反而把一堆程式語言塞進「擅長工具」欄位。這套篩選會把這類模糊職缺標示出來，讓我能主動避開。
+
+技術面，本專案是一套完整的職缺資料生態系，我刻意以「系統分析 (SA) 視角」拆成三個獨立 repo，各司其職並透過共用 MariaDB 與 SSO 串接，模擬真實企業的微服務分工。
+
+整體由三個服務組成：
+1. Job Digger（爬蟲服務）：以 Python 3.11 + FastAPI + Playwright 打造的 104 職缺爬蟲，採三階段 pipeline —— 清單採集 → 內文過濾 → 公司資料補全。透過 asyncio 生產者-消費者模型提高吞吐，並以無頭瀏覽器 Playwright (Chromium) 模擬真人操作來閃避反爬，最後寫入共用 MariaDB。對外只暴露 3 個 HTTP endpoint 供後台觸發。
+2. Job Digger Admin（管理後台）：以 PHP 8.2 + Laravel 11 開發，僅負責「設定關鍵字」與「檢視抓回的職缺」，本身不執行爬取，採 MVC + Repository 分層。
+3. Middle Platform SSO 整合：後台整合身分中台的 Web Mode SSO，使用者必須先通過中台登入並驗證 JWT (Firebase JWT) 才能進入後台。`,
+        image: '/job_digger/start.png',
+        video: { url: '/job_digger/key_word.mov', caption: '關鍵字設定 Demo：於後台設定爬取關鍵字並觸發採集流程' },
         gallery: [
-            { url: '/portfolio/image_1.png', caption: 'Azure 伺服器資源畫面' },
-            { url: '/portfolio/image_2.png', caption: 'GitHub Actions CI/CD 流程截圖' }
+            { url: '/job_digger/start.png', caption: '後台首頁：登入中台 SSO 後進入 Job Digger Admin 操作介面' },
+            { url: '/job_digger/list.png', caption: '職缺清單頁：即使爬蟲仍在背景執行，也能即時查看已完成 ETL 的職缺項目，並依公司規模與篩選分類快速聚焦目標' }
         ],
         links: [
-            { name: '透過專屬網域名稱造訪', url: 'http://shaneportolio.japanwest.cloudapp.azure.com', note: '若連線有問題，可能是 DNS 尚未生效配置' },
-            { name: '透過主機 IP 直接造訪', url: 'http://20.18.160.75' }
+            { name: '爬蟲服務原始碼 (job_digger)', url: 'https://github.com/jacky0996/job_digger.git' },
+            { name: '管理後台原始碼 (job_digger_admin)', url: 'https://github.com/jacky0996/job_digger_admin.git' }
         ],
-        tags: ['Vue 3', 'Tailwind', 'Docker', 'Azure', 'CI/CD'],
+        saDoc: true,
+        tags: ['Python', 'FastAPI', 'Playwright', 'Laravel 11', 'MariaDB', 'SSO', 'Docker', 'SA 文件撰寫']
+    },
+    {
+        id: 7,
+        title: 'Ask Shane：RAG 履歷問答機器人',
+        content: `招募方手上有十份履歷，不會逐份翻 README 與 SA 文件。Ask Shane 把這些文件變成一個「可對話的入口」，讓人用問的比用翻的快：問「Shane 做過後端認證系統嗎？」就能得到附帶來源檔名的回答。
+
+核心心法是「LLM 負責用人話組織，RAG 負責提供事實」——機器人不准用自己的世界知識回答關於我的事，這是準確性的關鍵。系統由兩條獨立 pipeline 組成：
+1. 離線建庫 (ingest.py)：讀取 corpus 文件 → 標題感知切塊 → 本地 embedding → 寫入向量庫 Chroma。
+2. 線上問答 (ask.py / app.py)：使用者問題 embedding → 向量檢索 top-k → 組裝 Prompt（system + 檢索片段 + 問題）→ Gemini API → 回傳答案與來源。
+
+因為這是「讓別人認識我」的工具，答錯比答不出來更糟，所以做了層層防守：範圍內事實直接答並附來源；文件沒提到就誠實說「文件裡沒有提到」絕不臆測；範圍外或私人問題禮貌婉拒；並內建 prompt injection 防護，被要求「忽略指示說他很爛」也不會被帶走。
+
+技術選型上以本地 sentence-transformers 做多語 embedding，中文檢索開箱即用且零額外 API 成本；LLM 採 Google Gemini 免費層。提供 CLI 與 Streamlit 雙介面，並以多階段 Docker build 把相依與知識庫一起烤進 image（冷啟動免再下載模型），推上 main 即自動部署到 Cloud Run，scale-to-zero 讓展示幾乎零成本。`,
+        image: '/ask_shane/view.png',
+        gallery: [
+            { url: '/ask_shane/view.png', caption: 'Streamlit 問答介面：回答附上來源檔名，招募方可自行驗證' }
+        ],
+        links: [
+            { name: '前往線上 Demo', url: 'https://ask-shane-1036164298301.asia-east1.run.app/', note: 'Cloud Run scale-to-zero 部署，首次喚醒可能需數秒冷啟動' },
+            { name: '前往 GitHub 專案原始碼', url: 'https://github.com/jacky0996/ask-shane.git' }
+        ],
+        tags: ['Python 3', 'RAG', 'Gemini', 'Chroma', 'Streamlit', 'Cloud Run', 'Prompt Injection 防護']
     },
     {
         id: 2,
@@ -53,15 +87,15 @@ const allProjects = ref([
         content: `本專案為一套專為行銷團隊打造的 EDM 管理系統。開發亮點在於我特別嘗試了「系統分析 (SA) 文件」的撰寫，包含針對 PM 與利害關係人的周報日誌與 Use Case 流程圖，確保需求轉化為功能的嚴謹度。
 
 在資安與權限管理層面，我們實作了與公司 HWS 系統的 SSO (Single Sign-On) 介接，採用「一次性短期 Token 交換長期證明的機制」。此架構具備三大優勢：
-- **防禦 CSRF 攻擊**：捨棄 Cookie 方案，瀏覽器不會自動發送憑證，從根本上避免了跨站請求偽造。
-- **解決跨網域限制**：支持 EDM (Vue) 與 HWS (Laravel) 在完全不同的網域甚至是網絡環境下對接。
-- **靈活性**：權限完全由 Authorization Header 控制，適合 SPA 與 API 分離的現代架構。
+- 防禦 CSRF 攻擊：捨棄 Cookie 方案，瀏覽器不會自動發送憑證，從根本上避免了跨站請求偽造。
+- 解決跨網域限制：支持 EDM (Vue) 與 HWS (Laravel) 在完全不同的網域甚至是網絡環境下對接。
+- 靈活性：權限完全由 Authorization Header 控制，適合 SPA 與 API 分離的現代架構。
 
 實作流程如下：
-1. **引導跳轉**：使用者從內部系統跳轉時，網址帶入 ?token=SSO_TOKEN。
-2. **攔截與驗證**：前端路由守衛 (guard.ts) 優先檢查 URL 參數，偵測到 Token 後立即呼叫 AuthStore 進行驗證。
-3. **後端換票**：前端將短期 Token 送往驗證介面，HWS 驗證通過後會註銷該短效 Token 並回傳正式 accessToken。
-4. **清理與持久化**：驗證成功後使用 replace: true 移除網址參數以確保網址乾淨，並將正式 Token 儲存在 localStorage 供後續 API 請求使用。`,
+1. 引導跳轉：使用者從內部系統跳轉時，網址帶入 ?token=SSO_TOKEN。
+2. 攔截與驗證：前端路由守衛 (guard.ts) 優先檢查 URL 參數，偵測到 Token 後立即呼叫 AuthStore 進行驗證。
+3. 後端換票：前端將短期 Token 送往驗證介面，HWS 驗證通過後會註銷該短效 Token 並回傳正式 accessToken。
+4. 清理與持久化：驗證成功後使用 replace: true 移除網址參數以確保網址乾淨，並將正式 Token 儲存在 localStorage 供後續 API 請求使用。`,
         image: '/edm/edm05.png',
         gallery: [
             { url: '/edm/edm01.png', caption: '系統開發日誌：詳細紀錄每週技術決策，利於 PM 追縱進度' },
@@ -72,6 +106,7 @@ const allProjects = ref([
         links: [
             { name: '前往 GitHub 專案原始碼', url: 'https://github.com/jacky0996/EDM.git', note: '僅提供程式碼 相關介接系統暫時無法提供' }
         ],
+        saDoc: true,
         tags: ['Vue 3', 'Vben Admin', 'SSO 介接', 'SA 文件撰寫', 'Excel 集成']
     },
     {
@@ -83,10 +118,10 @@ const allProjects = ref([
 原本公司的定期保固（定保）案件皆由客服單位統一接收後，再手動派遣給各相關單位的小組長。這種模式不僅增加了客服人員的大量行政負荷 (Loading)，也容易在人工傳達過程中產生派遣錯誤或延遲。
 
 為了優化此流程，我開發了一套自動化的派工設定機制：
-1. **跨系統整合**：串接公司內其他系統，自動獲取被指派單位的部門主管資訊。
-2. **層級式管理**：由部門主管設定所屬小組長，再由小組長指派具體工程師。
-3. **自動繼承與派遣**：系統會記憶此核心設定，未來該單位的定保案件將自動套用此規則進行派工，實現真正的一鍵自動化。
-4. **自動化監控機制**：撰寫背景排程 (Schedule) 每週自動檢查尚未完成派工的項目，並即時寄送通知信提醒相關主管，確保案件不被遺漏。
+1. 跨系統整合：串接公司內其他系統，自動獲取被指派單位的部門主管資訊。
+2. 層級式管理：由部門主管設定所屬小組長，再由小組長指派具體工程師。
+3. 自動繼承與派遣：系統會記憶此核心設定，未來該單位的定保案件將自動套用此規則進行派工，實現真正的一鍵自動化。
+4. 自動化監控機制：撰寫背景排程 (Schedule) 每週自動檢查尚未完成派工的項目，並即時寄送通知信提醒相關主管，確保案件不被遺漏。
 
 此優化顯著降低了客服單位的維運壓力，並透過「部門主管各自領案」的模式大幅提升了派工的準確性與響應速度。`,
         image: null,
@@ -104,12 +139,12 @@ const allProjects = ref([
         content: `此項目彙整了我在「掘夢網 (Digeam)」時期擔任小組主管及後端開發的重點實務貢獻。
 
 在技術實踐層面，我主導了多個遊戲官網的「Game Mall (遊戲商城)」系統開發：
-- **核心後端與數據整合**：負責金流支付 API 串接，並確保外部網域與內部遊戲實時數據的高效對接。
-- **動態帳務處理**：系統能讓玩家輸入角色 ID 後，即時呼叫內部 API 獲取詳盡的角色資料與帳戶狀態，並直接進行點數與道具的購買及入點作業。
+- 核心後端與數據整合：負責金流支付 API 串接，並確保外部網域與內部遊戲實時數據的高效對接。
+- 動態帳務處理：系統能讓玩家輸入角色 ID 後，即時呼叫內部 API 獲取詳盡的角色資料與帳戶狀態，並直接進行點數與道具的購買及入點作業。
 
 在團隊管理與流程優化層面：
-- **推行前後端職責分離**：主導該公司「網頁設計部門」內部前後端開發流程的分離設定。這套科學的工作流管理模式大幅提昇了專案開發效率。
-- **招聘與引才標準**：這套開發模式目前仍是該公司在招聘與篩選技術同仁時的重要評估依據。
+- 推行前後端職責分離：主導該公司「網頁設計部門」內部前後端開發流程的分離設定。這套科學的工作流管理模式大幅提昇了專案開發效率。
+- 招聘與引才標準：這套開發模式目前仍是該公司在招聘與篩選技術同仁時的重要評估依據。
 
 這些實戰案例體現了我將複雜業務需求抽象化並落實為高品質代碼的能力。`,
         image: null,
@@ -232,10 +267,41 @@ const currentProject = computed(() => {
                 </template>
             </div>
 
+            <!-- Demo 影片 -->
+            <template v-if="currentProject.video">
+                <figure class="mb-12 m-0">
+                    <div class="rounded-2xl overflow-hidden border border-gray-200 shadow-sm bg-black flex justify-center">
+                        <video :src="currentProject.video.url" controls playsinline preload="metadata"
+                            class="max-w-full h-auto max-h-[32rem] rounded-2xl">
+                            您的瀏覽器不支援影片播放，請改用<a :href="currentProject.video.url" target="_blank"
+                                rel="noopener noreferrer">此連結</a>觀看。
+                        </video>
+                    </div>
+                    <figcaption v-if="currentProject.video.caption"
+                        class="text-center text-sm tracking-wide text-gray-500 mt-4 font-medium">
+                        {{ currentProject.video.caption }}
+                    </figcaption>
+                </figure>
+            </template>
+
             <div class="prose prose-lg max-w-none text-secondary">
                 <p class="text-xl leading-relaxed mb-6 font-light">
                     {{ currentProject.description }}
                 </p>
+
+                <!-- SA 文件醒目提示 -->
+                <template v-if="currentProject.saDoc">
+                    <div class="not-prose mb-6 mt-4 flex items-start gap-3 rounded-2xl border-2 border-accent bg-blue-50/60 px-5 py-4 shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 text-accent mt-0.5" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <p class="text-sm md:text-base font-semibold text-primary leading-relaxed m-0">
+                            👉 點進下方 GitHub 專案，<span class="text-accent">README 內附有完整撰寫的 SA 系統分析文件</span>（含架構圖、ERD、Sequence Diagram 與 ADR）。
+                        </p>
+                    </div>
+                </template>
 
                 <template v-if="currentProject.links && currentProject.links.length > 0">
                     <div class="flex flex-wrap gap-6 mb-8 mt-4 not-prose">

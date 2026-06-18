@@ -3,25 +3,25 @@ import { ref } from 'vue'
 
 const projects = ref([
   {
+    id: 6,
+    title: 'Job Digger 職缺採集與管理生態系',
+    description: '由 FastAPI 爬蟲、Laravel 後台與身分中台串成的三層架構，自動採集並清洗 104 職缺資料。',
+    image: '/job_digger/start.png',
+    tags: ['Python', 'FastAPI', 'Playwright', 'Laravel 11', 'SSO', 'Docker']
+  },
+  {
+    id: 7,
+    title: 'Ask Shane：RAG 履歷問答機器人',
+    description: '答案只來自我真實的履歷與專案文件，逐題附上來源，查不到就誠實說不知道。',
+    image: '/ask_shane/view.png',
+    tags: ['Python 3', 'RAG', 'Gemini', 'Chroma', 'Cloud Run']
+  },
+  {
     id: 2,
     title: '自動化社群互動與爬蟲系統',
     description: '基於 Python 構建的全自動排程發文系統，整合 Playwright 爬蟲與 Docker 進行一鍵部署還原。',
     image: '/automation/auto_2.png',
     tags: ['Python', 'Playwright', 'MySQL', 'Docker']
-  },
-  {
-    id: 3,
-    title: 'EDM 營銷與成員管理系統',
-    description: '整合企業級 SSO 驗證、大規模 Excel 處理與高效能數據維護的現代化營銷管理平台。',
-    image: '/edm/edm05.png',
-    tags: ['Vue 3', 'Vben Admin', 'SSO 介接', 'SA 文件撰寫', 'Excel 集成']
-  },
-  {
-    id: 5,
-    title: '歷年多元實務開發案例彙整',
-    description: '因受 NDA 限制無法公開原始碼的各類企業專案，包含大型遊戲入口與 SAP/CRM 整合。',
-    image: '/portfolio/image_1.png',
-    tags: ['系統架構', '前後端整合', '資安維運', '實踐經驗']
   }
 
 ])
@@ -31,16 +31,26 @@ const projects = ref([
   <div class="space-y-16">
     <!-- Hero Section -->
     <section class="py-12 md:py-24 animate-fade-in-up">
-      <h1 class="text-4xl md:text-6xl font-extrabold text-primary mb-6 leading-tight">
-        作品集
-      </h1>
-      <p class="text-xl md:text-2xl text-secondary max-w-2xl font-light leading-relaxed">
-        本網站使用 Vue 3 與 Tailwind CSS 建構前端畫面，並透過 Azure 主機搭配 Docker 及 GitHub Actions 實作 CI/CD 自動化部署流程。
-      </p>
-      <div class="mt-10">
+      <div class="text-xl md:text-2xl text-secondary max-w-2xl font-light leading-relaxed space-y-2">
+        <p>軟體開發經歷 6 年以上，包含管理職近 2 年</p>
+        <p>擅長跨部門溝通、系統規劃</p>
+        <p>仍然會追尋新技術並安排學習進度</p>
+      </div>
+      <div class="mt-10 flex flex-wrap gap-4">
         <router-link to="/project" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-accent hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent">
           查看我的作品
         </router-link>
+        <a href="https://ask-shane-1036164298301.asia-east1.run.app/" target="_blank" rel="noopener noreferrer"
+          class="inline-flex items-center px-6 py-3 border border-accent text-base font-medium rounded-md text-accent bg-white hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent">
+          💬 問問 Ask Shane
+        </a>
+        <a href="/林楨祥.pdf" target="_blank" rel="noopener noreferrer"
+          class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-primary bg-white hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          下載 104 履歷 (PDF)
+        </a>
       </div>
     </section>
 
